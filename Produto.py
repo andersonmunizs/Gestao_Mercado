@@ -4,11 +4,13 @@ def carregar_produto() -> list: #Carregando o arquivo Produtos.csv
     listaProdutos = mcsv.carregarDados("Produtos.csv")
     return listaProdutos
 
-def print_produtos(listaProdutos):
+def mostrar_produtos(listaProdutos):
     print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format("ID", "Setor", "Nome", "Preço", "Validade", "Quantidade"))
     print("_" * 66)  # Linha divisória
     for product in listaProdutos:
-        print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format(product["Id"], product["Setor"], product["Nome"], product["Preco"], product["Validade"], product["Quantidade"]))
+        # Limita o comprimento do nome do produto a 15 caracteres
+        nome_formatado = product["Nome"][:15] if len(product["Nome"]) > 15 else product["Nome"]
+        print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format(product["Id"], product["Setor"], nome_formatado, product["Preco"], product["Validade"], product["Quantidade"]))
     print() # \n
 
 def cadastrarProduto():
