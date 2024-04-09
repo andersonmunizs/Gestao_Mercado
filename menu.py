@@ -3,8 +3,8 @@ import Clientes as cl
 import VendasCompras as vc
 
 def menu_produto():
+    listaProdutos = pd.carregar_produto()
     while True:
-
         print("\n=== Menu Produto ===")
         print("1. Cadastrar Produto")
         print("2. Editar Produto")
@@ -15,15 +15,12 @@ def menu_produto():
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
-            listaProdutos = pd.carregar_produto()
             pd.print_produtos(listaProdutos)
             pd.cadastrar_produto(listaProdutos)
         elif opcao == '2':
-            listaProdutos = pd.carregar_produto()
             pd.print_produtos(listaProdutos)
             pd.editar_produto(listaProdutos)
         elif opcao == '3':
-            listaProdutos = pd.carregar_produto()
             pd.print_produtos(listaProdutos)
             pd.excluir_produto(listaProdutos)
         elif opcao == '4':

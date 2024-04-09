@@ -15,7 +15,15 @@ def cadastrarProduto():
     print("==== Cadastro de produto ====")
     produto = {}
     produto['Id'] = input("ID do produto: ")
-    produto['Setor'] = input("Setor do produto:  [Higiene, Limpeza, Bebidas, Frios, Padaria, Açougue]\n")
+    
+    while True:
+        setor = input("Setor do produto: [Higiene, Limpeza, Bebidas, Frios, Padaria, Açougue]\n")
+        if setor.lower() in ['higiene', 'limpeza', 'bebidas', 'frios', 'padaria', 'açougue']:
+            produto['Setor'] = setor.title()  # Converte para título caso o usuário digite em minúsculas
+            break
+        else:
+            print("Por favor, digite um setor válido.")
+
     produto['Nome'] = input("Nome do produto: ")
     produto['Preco'] = float(input("Preço do produto: "))
     produto['Validade'] = input("Data de validade do produto: ")
