@@ -15,7 +15,7 @@ def menu_VendasCompras():
 
         if opcao == '1':
             cpf_cliente = input("Digite o CPF do cliente: ")
-            vc.carrinho_de_compras(cpf_cliente)
+            vc.nova_venda(cpf_cliente)
         elif opcao == '2':
             cpf_consulta = input("Digite o CPF para a consulta: ")
             vc.obter_informacoes_vendas_cpf(cpf_consulta)
@@ -73,7 +73,7 @@ def menu_produto():
             pd.mostrar_produtos(listaProdutos)
             pd.excluir_produto(listaProdutos)
         elif opcao == '4':
-            limite_estoque_baixo = 100 # Modificar de acordo com a demanda da regra do negócio ou colocar um input  
+            limite_estoque_baixo = 50 # Modificar de acordo com a demanda da regra do negócio ou colocar um input  
             pd.verifica_estoque_baixo(limite_estoque_baixo)
         elif opcao == '5':
             pd.calcular_estoque_por_setor()
@@ -102,4 +102,4 @@ def menu_principal():
             print("Saindo...")
             break
         else:
-            print("Opção inválida. Tente novamente.")
+            print("Opção inválida. Por favor, escolha uma opção válida.")

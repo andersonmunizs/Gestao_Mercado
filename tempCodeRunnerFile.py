@@ -1,4 +1,5 @@
-import menu as vi
+#Alunos: Anderson Muniz, Thainá Nunes
+import menu as mn
 
 if __name__ == "__main__":
-    vi.menu_principal()
+    mn.menu_principal()

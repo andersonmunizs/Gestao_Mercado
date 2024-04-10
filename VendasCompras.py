@@ -12,9 +12,9 @@ def verificar_cliente(cpf):
     return None
 
 def obter_info_produto():
-    lista_produtos = pd.carregar()
+    lista_produtos = pd.carregar_produto()
     print("=== Produtos Disponíveis ===")
-    pd.print_produtos(lista_produtos)
+    pd.mostrar_produtos(lista_produtos)
     id_produto = input("Digite o ID do produto a adquirir (Digite '0' para encerrar a compra): ")
     if id_produto == '0':
         return None
@@ -31,35 +31,31 @@ def obter_info_produto():
     return None
 
 def registrar_venda(cliente, compras):
-
     data_atual = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
     valor_total = calcular_valor_total(compras)
-
     adicionar_pontos_cliente(cliente, valor_total)
-
+    
     vendas = mcsv.carregarDados("Vendas.csv")
     ultimo_id_venda = 1 if not vendas else int(vendas[-1]['ID']) + 1
-
+    
     registros_itens_compra = []
     for produto in compras:
         produto_vendido = produto.copy()
-
-        quantidade_comprada = produto_vendido.pop('Quantidade')  # Remove a quantidade comprada do produto vendido
-
+        quantidade_comprada = produto_vendido['Quantidade']  # Captura a quantidade comprada
+        del produto_vendido['Quantidade']  # Remove a quantidade do produto vendido
         produto_vendido['ID_Venda'] = str(ultimo_id_venda)
         produto_vendido['Data_Compra'] = data_atual
-        for _ in range(quantidade_comprada):
-            registros_itens_compra.append(produto_vendido)
-
-    mcsv.gravarDados("ItensCompra.csv", list(compras[0].keys()) + ['ID_Venda', 'Data_Compra', 'Quantidade'], registros_itens_compra, modo="a")
-
+        produto_vendido['Quantidade'] = quantidade_comprada  # Adiciona a quantidade ao produto vendido
+        registros_itens_compra.append(produto_vendido)  # Adiciona o produto modificado à lista
+        
+    mcsv.gravarDados("ItensCompra.csv", list(compras[0].keys()) + ['ID_Venda', 'Data_Compra'], registros_itens_compra, modo="a")
+    
     venda = {'ID': str(ultimo_id_venda), 'CPF_Cliente': cliente['CPF'], 'Nome_Cliente': cliente['Nome'],
              'Data_Compra': data_atual, 'Valor_Total': valor_total, 'Quantidade_Itens': len(registros_itens_compra)} 
     mcsv.gravarDados("Vendas.csv", list(venda.keys()), [venda], modo="a")
 
-
     atualizar_estoque(compras)
+
 
 
 def calcular_valor_total(compras):
@@ -69,14 +65,14 @@ def calcular_valor_total(compras):
     return valor_total
 
 def atualizar_estoque(compras):
-    produtos = pd.carregar()
+    produtos = pd.carregar_produto()
     for produto in produtos:
         for compra in compras:
             if produto['Id'] == compra['Id']:
                 produto['Quantidade'] = str(int(produto['Quantidade']) - int(compra['Quantidade']))
     mcsv.gravarDados("Produtos.csv", list(produtos[0].keys()), produtos)
 
-def carrinho_de_compras(cpf):
+def nova_venda(cpf):
     lista = cl.carregar_cliente()
     cliente = verificar_cliente(cpf)
     if cliente is None:
@@ -132,9 +128,9 @@ def imprimir_itens_mais_vendidos_3_dias():
     for venda in vendas:
         nome_produto = venda['Nome']
         if nome_produto in contagem_itens:
-            contagem_itens[nome_produto] += 1
+            contagem_itens[nome_produto] += int(venda['Quantidade'])  # Somar a quantidade vendida
         else:
-            contagem_itens[nome_produto] = 1
+            contagem_itens[nome_produto] = int(venda['Quantidade'])
 
     itens_mais_vendidos = sorted(contagem_itens.items(), key=lambda x: x[1], reverse=True)
 

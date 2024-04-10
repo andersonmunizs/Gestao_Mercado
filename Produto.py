@@ -13,7 +13,7 @@ def mostrar_produtos(listaProdutos):
         print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format(product["Id"], product["Setor"], nome_formatado, product["Preco"], product["Validade"], product["Quantidade"]))
     print() # \n
 
-def cadastrarProduto():
+def input_cadastrar_Produto():
     print("==== Cadastro de produto ====")
     produto = {}
     produto['Id'] = input("ID do produto: ")
@@ -34,7 +34,7 @@ def cadastrarProduto():
     return produto
 
 def cadastrar_produto(listaProdutos: list) -> bool:
-    prod = cadastrarProduto()
+    prod = input_cadastrar_Produto()
     listaProdutos.append(prod)
     campos = ["Id", "Setor", "Nome", "Preco", "Validade", "Quantidade"]
     return mcsv.gravarDados("Produtos.csv", campos, listaProdutos)
