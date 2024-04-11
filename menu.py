@@ -44,9 +44,9 @@ def menu_clientes():
             cl.cadastrar_cliente(listaClientes)
         elif opcao == '2':
             listaClientes = cl.carregar_cliente()
-            cpf = input("Digite o CPF do cliente a ser excluído: ")
-            if len(cpf) == 14:
-                cl.excluir_cliente(listaClientes, cpf)
+            cpf_buscar = input("Digite o CPF do cliente a ser excluído: ")
+            if len(cpf_buscar) == 14:
+                cl.excluir_cliente(listaClientes, cpf_buscar)
             else:
                 print("CPF inválido. Por favor, digite um CPF válido.")
         elif opcao == '3':
