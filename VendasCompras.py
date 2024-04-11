@@ -13,7 +13,7 @@ def verificar_cliente(cpf):
 
 def obter_info_produto():
     lista_produtos = pd.carregar_produto()
-    print("#### Produtos Disponíveis ####")
+    print("\n")
     pd.mostrar_produtos(lista_produtos)
     id_produto = input("Digite o ID do produto a adquirir (Digite 'F' para encerrar): ")
     if id_produto == 'F':
