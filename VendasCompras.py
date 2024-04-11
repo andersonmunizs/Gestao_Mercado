@@ -41,12 +41,12 @@ def registrar_venda(cliente, compras):
     registros_itens_compra = []
     for produto in compras:
         produto_vendido = produto.copy()
-        quantidade_comprada = produto_vendido['Quantidade']  # Captura a quantidade comprada
-        del produto_vendido['Quantidade']  # Remove a quantidade do produto vendido
+        quantidade_comprada = produto_vendido['Quantidade']  
+        del produto_vendido['Quantidade']  
         produto_vendido['ID_Venda'] = str(ultimo_id_venda)
         produto_vendido['Data_Compra'] = data_atual
-        produto_vendido['Quantidade'] = quantidade_comprada  # Adiciona a quantidade ao produto vendido
-        registros_itens_compra.append(produto_vendido)  # Adiciona o produto modificado à lista
+        produto_vendido['Quantidade'] = quantidade_comprada 
+        registros_itens_compra.append(produto_vendido) 
         
     mcsv.gravarDados("ItensCompra.csv", list(compras[0].keys()) + ['ID_Venda', 'Data_Compra'], registros_itens_compra, modo="a")
     
@@ -55,7 +55,6 @@ def registrar_venda(cliente, compras):
     mcsv.gravarDados("Vendas.csv", list(venda.keys()), [venda], modo="a")
 
     atualizar_estoque(compras)
-
 
 
 def calcular_valor_total(compras):
