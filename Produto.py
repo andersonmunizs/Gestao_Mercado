@@ -1,4 +1,5 @@
 import manipulaCSV as mcsv
+import csv
 
 def carregar_produto() -> list: #Carregando o arquivo Produtos.csv
     listaProdutos = mcsv.carregarDados("Produtos.csv")
@@ -83,7 +84,7 @@ def excluir_produto(listaProdutos: list) -> bool:
             produto_encontrado = True
             print("Produto encontrado:")
             print(produto)
-            print("-" * 30)
+            print("_" * 30)
 
             certeza = input("Tem certeza que deseja excluir o produto? (S/N): ").strip().upper()
             if certeza == "S":
@@ -113,8 +114,6 @@ def verifica_estoque_baixo(limite_estoque_baixo: int) -> list:
         print("Nenhum produto está com estoque baixo.")
 
     return listaProdutos
-
-import csv
 
 def calcular_estoque_por_setor():
     estoque_setor = {}
