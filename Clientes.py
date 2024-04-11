@@ -66,8 +66,10 @@ def excluir_cliente(listaClientes: list, cpf: str) -> bool:
                 listaClientes.pop(i)
         if flag:
             mcsv.gravarDados("Cliente.csv", campos_cliente, listaClientes)
+            print("Cliente excluído com sucesso.")
         return flag
     except IOError:
         print("Erro ao acessar o arquivo de clientes.")
         return False
+
 
