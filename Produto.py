@@ -18,7 +18,7 @@ def mostrar_produtos(listadeProdutos):
     print() # \n
 
 def input_cadastrar_Produto():
-    print("==== Cadastro de produto ====")
+    print("#### Cadastro de produto ####")
     produto = {}
     produto['Id'] = input("ID do produto: ")
     

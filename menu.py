@@ -4,7 +4,7 @@ import VendasCompras as vc
 
 def menu_VendasCompras():
     while True:
-        print("\n=== Menu Vendas e Compras ===")
+        print("\n#### Menu Vendas e Compras ####")
         print("[1] Nova Venda")
         print("[2] Pesquisar compras pelo CPF")
         print("[3] Visualizar os 5 produtos mais vendidos ultimos 3 dias")
@@ -32,7 +32,7 @@ def menu_VendasCompras():
 
 def menu_clientes():
     while True:
-        print("\n=== Menu Clientes ===")
+        print("\n#### Menu Clientes ####")
         print("[1] Cadastrar Novo Cliente")
         print("[2] Excluir Cliente")
         print("[3] Editar Cliente")
@@ -60,7 +60,7 @@ def menu_clientes():
 def menu_produto():
     listadeProdutos = pd.carregar_produto()
     while True:
-        print("\n=== Menu Produto ===")
+        print("\n#### Menu Produto ####")
         print("[1] Cadastrar Produto")
         print("[2] Editar Produto")
         print("[3] Excluir Produto")
@@ -91,7 +91,7 @@ def menu_produto():
 
 def menu_principal():
     while True:
-        print("\n### MENU PRINCIPAL ###")
+        print("\n#### MENU PRINCIPAL ####")
         print("[1] Vendas e Compras")
         print("[2] Clientes")
         print("[3] Produtos")
