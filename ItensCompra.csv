@@ -1,3 +1,6 @@
 Id;Setor;Nome;Preco;Validade;Quantidade;ID_Venda;Data_Compra
 2;Bebidas;Heineken 330ml;6.0;10/06/2024;10;7;2024-04-10 01:13:31
 2;Bebidas;Heineken 330ml;6.0;10/06/2024;10;8;2024-04-10 01:16:34
+4;Açougue;Picanha 1KG;60.0;11/05/2024;10;9;2024-04-10 22:05:26
+4;Açougue;Picanha 1KG;60.0;11/05/2024;1;10;2024-04-10 22:07:18
+2;Bebidas;Heineken 330ml;6.0;10/06/2024;1;11;2024-04-11 03:12:51

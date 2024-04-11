@@ -1,17 +1,20 @@
 import manipulaCSV as mcsv
 import csv
+import sys
 
-def carregar_produto() -> list: #Carregando o arquivo Produtos.csv
-    listaProdutos = mcsv.carregarDados("Produtos.csv")
-    return listaProdutos
+def carregar_produto() -> list:
+    try:
+        listadeProdutos = mcsv.carregarDados("Produtos.csv")
+        return listadeProdutos
+    except FileNotFoundError:
+        print("Arquivo 'Produtos.csv' não encontrado.")
+        sys.exit(1)
 
-def mostrar_produtos(listaProdutos):
-    print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format("ID", "Setor", "Nome", "Preço", "Validade", "Quantidade"))
-    print("_" * 66)  # Linha divisória
-    for product in listaProdutos:
-        # Limita o comprimento do nome do produto a 15 caracteres
+def mostrar_produtos(listadeProdutos):
+    print("{:<4} {:<9} {:<20} {:<6} {:<11} {:<10}".format("[ID]", "[Setor]", "[Nome]", "[Preço]", "[Validade]", "[Quantidade]"))
+    for product in listadeProdutos:
         nome_formatado = product["Nome"][:15] if len(product["Nome"]) > 15 else product["Nome"]
-        print("{:<3} {:<10} {:<15} {:<7} {:<10} {:<10}".format(product["Id"], product["Setor"], nome_formatado, product["Preco"], product["Validade"], product["Quantidade"]))
+        print("{:<4} {:<9} {:<20} {:<6} {:<11} {:<10}".format(product["Id"], product["Setor"], nome_formatado, product["Preco"], product["Validade"], product["Quantidade"]))
     print() # \n
 
 def input_cadastrar_Produto():
@@ -34,101 +37,127 @@ def input_cadastrar_Produto():
     print("Produto cadastrado com sucesso!\n\n")
     return produto
 
-def cadastrar_produto(listaProdutos: list) -> bool:
+def cadastrar_produto(listadeProdutos: list) -> bool:
     prod = input_cadastrar_Produto()
-    listaProdutos.append(prod)
+    listadeProdutos.append(prod)
     campos = ["Id", "Setor", "Nome", "Preco", "Validade", "Quantidade"]
-    return mcsv.gravarDados("Produtos.csv", campos, listaProdutos)
+    return mcsv.gravarDados("Produtos.csv", campos, listadeProdutos)
 
 
-def editar_produto(listaProdutos: list) -> None:
+def editar_produto(listadeProdutos: list) -> None:
     id_produto = input("Digite o ID do produto que deseja editar: ")
-
-    #Verificando se o produto está na lista
     produto_encontrado = False
-    for produto in listaProdutos:
+
+    for produto in listadeProdutos:
         if produto['Id'] == id_produto:
             produto_encontrado = True
             print("Produto encontrado:")
             print(produto)
-            print("-" * 30)
+            print("=" * 30)
 
-            print("Digite as novas informações do produto:")
+            print("Edite as novas informações do produto:")
             novo_produto = {}
             for campo, valor_atual in produto.items():
                 novo_valor = input(f"{campo} ({valor_atual}): ").strip()
+                if campo == 'Preco':
+                    while True:
+                        try:
+                            novo_valor = float(novo_valor)
+                            if novo_valor >= 0:
+                                break
+                            else:
+                                print("O preço deve ser um número positivo.")
+                                novo_valor = input(f"{campo} ({valor_atual}): ").strip()
+                        except ValueError:
+                            print("Por favor, digite um preço válido.")
+                            novo_valor = input(f"{campo} ({valor_atual}): ").strip()
+                elif campo == 'Quantidade':
+                    while True:
+                        try:
+                            novo_valor = int(novo_valor)
+                            if novo_valor >= 0:
+                                break
+                            else:
+                                print("A quantidade deve ser um número inteiro não negativo.")
+                                novo_valor = input(f"{campo} ({valor_atual}): ").strip()
+                        except ValueError:
+                            print("Por favor, digite uma quantidade válida.")
+                            novo_valor = input(f"{campo} ({valor_atual}): ").strip()
+
                 if novo_valor:
                     novo_produto[campo] = novo_valor
                 else:
                     novo_produto[campo] = valor_atual
 
-            # Atualizando o produto na lista
-            index_produto = listaProdutos.index(produto)
-            listaProdutos[index_produto] = novo_produto
-
-            # Registrando os produtos atualizados no arquivo CSV
+            index_produto = listadeProdutos.index(produto)
+            listadeProdutos[index_produto] = novo_produto
             campos = ["Id", "Setor", "Nome", "Preco", "Validade", "Quantidade"]
-            mcsv.gravarDados("Produtos.csv", campos, listaProdutos)
+            try:
+                mcsv.gravarDados("Produtos.csv", campos, listadeProdutos)
+                print("Produto editado com sucesso.")
+            except Exception as e:
+                print("Erro ao salvar as alterações no arquivo:", e)
 
-            print("Produto editado com sucesso.")
             break
+
     if not produto_encontrado:
         print("Produto não encontrado.")
 
 
-def excluir_produto(listaProdutos: list) -> bool:
+def excluir_produto(listadeProdutos: list) -> bool:
     id_produto = input("Digite o ID do produto que deseja excluir: ")
     produto_encontrado = False
-    for produto in listaProdutos:
+    for produto in listadeProdutos:
         if produto['Id'] == id_produto:
             produto_encontrado = True
+
             print("Produto encontrado:")
             print(produto)
-            print("_" * 30)
+            print("=" * 30)
 
-            certeza = input("Tem certeza que deseja excluir o produto? (S/N): ").strip().upper()
+            certeza = input("Certeza ao excluir o produto? (S/N): ").strip().upper()
             if certeza == "S":
-                listaProdutos.remove(produto)
-
+                listadeProdutos.remove(produto)
                 campos = ["Id", "Setor", "Nome", "Preco", "Validade", "Quantidade"]
-                return mcsv.gravarDados("Produtos.csv", campos, listaProdutos)
+                return mcsv.gravarDados("Produtos.csv", campos, listadeProdutos)
 
     if not produto_encontrado:
         print("Produto não encontrado.")
         return False
 
-def verifica_estoque_baixo(limite_estoque_baixo: int) -> list:
-    listaProdutos = mcsv.carregarDados("Produtos.csv")
+def verifica_estoque_baixo(listadeProdutos: list, limite_estoque_baixo: int) -> None:
     produtos_estoque_baixo = []
 
-    for produto in listaProdutos:
-
+    for produto in listadeProdutos:
         if int(produto['Quantidade']) < limite_estoque_baixo:
             produtos_estoque_baixo.append(produto)
 
     if produtos_estoque_baixo:
-        print("Os seguintes produtos estão com estoque baixo:")
+        print(f"Os seguintes produtos estão com estoque baixo (menos do que {limite_estoque_baixo}):")
         for produto in produtos_estoque_baixo:
             print(produto)
     else:
         print("Nenhum produto está com estoque baixo.")
 
-    return listaProdutos
+    return listadeProdutos
 
 def calcular_estoque_por_setor():
-    estoque_setor = {}
+    try:
+        estoque_setor = {}
+        with open('Produtos.csv', newline='', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=';')
+            for row in reader:
+                setor = row['Setor']
+                quantidade = int(row['Quantidade'])
+                if setor in estoque_setor:
+                    estoque_setor[setor] += quantidade
+                else:
+                    estoque_setor[setor] = quantidade
 
-    with open('Produtos.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=';')
-        for row in reader:
-            setor = row['Setor']
-            quantidade = int(row['Quantidade'])
-            if setor in estoque_setor:
-                estoque_setor[setor] += quantidade
-            else:
-                estoque_setor[setor] = quantidade
-
-    #Mostrando
-    print("Quantidade de estoque por setor:")
-    for setor, estoque in estoque_setor.items():
-        print(f"{setor}: {estoque}")
+        #Mostrando
+        print("Quantidade de estoque por setor:")
+        for setor, estoque in estoque_setor.items():
+            print(f"{setor}: {estoque}")
+    except FileNotFoundError:
+        print("Arquivo 'Produtos.csv' não encontrado.")
+        sys.exit(1)

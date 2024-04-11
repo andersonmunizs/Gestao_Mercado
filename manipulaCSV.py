@@ -21,8 +21,6 @@ def gravarDados(nomeArquivo: str, campos: list, lista: list, modo: str = "w") ->
 
             if modo == "w" or not arquivo_existe:
                 meuCSV.writeheader()
-
-            # Escrever os dados
             for r in lista:
                 meuCSV.writerow(r)
             arq.flush()

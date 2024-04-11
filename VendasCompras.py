@@ -15,8 +15,8 @@ def obter_info_produto():
     lista_produtos = pd.carregar_produto()
     print("=== Produtos Disponíveis ===")
     pd.mostrar_produtos(lista_produtos)
-    id_produto = input("Digite o ID do produto a adquirir (Digite '0' para encerrar a compra): ")
-    if id_produto == '0':
+    id_produto = input("Digite o ID do produto a adquirir (Digite 'F' para encerrar): ")
+    if id_produto == 'F':
         return None
     for produto in lista_produtos:
         if produto['Id'] == id_produto:
